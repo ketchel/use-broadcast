@@ -157,9 +157,9 @@ const sharedImpl: SharedImpl = (f, options) => (set, get, store) => {
 		}
 
 		/**
-		 * Get the fresh states
+		 * Get the fresh states, removing unsupported types
 		 */
-		const updated = get() as Item;
+		const updated = JSON.parse(JSON.stringify(get() as Item));
 
 		/**
 		 * Get the states that changed
@@ -192,12 +192,7 @@ const sharedImpl: SharedImpl = (f, options) => (set, get, store) => {
 			/**
 			 * Remove all the functions and symbols from the store
 			 */
-			const state = Object.entries(get() as Item).reduce((obj, [key, val]) => {
-				if (typeof val !== 'function' && typeof val !== 'symbol') {
-					obj = { ...obj, [key]: val };
-				}
-				return obj;
-			}, {});
+			const state =  JSON.parse(JSON.stringify(get() as Item));
 
 			/**
 			 * Send the state to the other tabs
